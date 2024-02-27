@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text File Saver</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    #textInput {
+      width: 80%;
+      height: 150px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #saveButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #saveButton:hover {
+      background-color: #2980b9;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <textarea id="textInput" rows="4" placeholder="Type your text here..."></textarea><br>
+  <button id="saveButton" onclick="saveTextAsFile()">Save</button>
+</div>
+
+<script>
+function saveTextAsFile() {
+  var textToSave = document.getElementById("textInput").value;
+  var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+  var fileNameToSaveAs = "myTextFile.txt";
+
+  var downloadLink = document.createElement("a");
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Download File";
+
+  if (window.webkitURL != null) {
+    // Chrome allows the link to be clicked without actually adding it to the DOM
+    downloadLink.href = window.webkitURL.createObjectURL(textToSaveAsBlob);
+  } else {
+    // Firefox requires the link to be added to the DOM before it can be clicked
+    downloadLink.href = window.URL.createObjectURL(textToSaveAsBlob);
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+  }
+
+  downloadLink.click();
+}
+
+function destroyClickedElement(event) {
+  document.body.removeChild(event.target);
+}
+</script>
+
+</body>
+</html>
